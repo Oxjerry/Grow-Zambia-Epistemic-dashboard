@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grow Zambia | Epistemic Accountability Dashboard</title>
+<style>
+:root{--ink:#17251f;--muted:#59675f;--line:#d9e1db;--paper:#f5f7f4;--card:#fff;--green:#176b45;--amber:#8b5a00;--red:#9b3434}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#173f2e;color:white;padding:24px 18px}header .wrap,main{max-width:1100px;margin:auto}h1{font-size:clamp(1.55rem,4vw,2.3rem);line-height:1.15;margin:0 0 10px}header p{margin:0;max-width:780px;color:#e3efe7}.notice{background:#fff4d7;color:#573d08;border:1px solid #e8d49b;padding:12px 14px;border-radius:10px;margin:18px 0}
+main{padding:18px}.eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;font-weight:800;color:var(--muted)}h2{font-size:1.2rem;margin:8px 0}p{margin-top:6px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;box-shadow:0 1px 2px #00000008}.target{font-size:1.35rem;font-weight:800;margin:6px 0}.small{font-size:.88rem;color:var(--muted)}.tag{display:inline-block;border-radius:999px;padding:3px 9px;font-size:.75rem;font-weight:750;background:#edf0ed;color:#3c4b42}.tag.unknown{background:#fff0d4;color:#704a00}.tag.verified{background:#e2f3e9;color:#155d3c}table{width:100%;border-collapse:collapse;min-width:780px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.9rem}th{background:#f0f4f0} .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:white}label{display:block;font-weight:650;font-size:.88rem;margin:9px 0 4px}input,select,textarea{width:100%;padding:9px;border:1px solid #b9c6bd;border-radius:7px;font:inherit;background:white}textarea{min-height:68px}button,.button{border:0;border-radius:8px;padding:10px 14px;background:var(--green);color:white;font-weight:750;cursor:pointer;text-decoration:none;display:inline-block;margin:8px 5px 0 0}button.secondary{background:#e8eee9;color:var(--ink);border:1px solid var(--line)}button.danger{background:#8c3535}.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}.status{font-weight:750}.foot{border-top:1px solid var(--line);margin-top:26px;padding:18px 0;color:var(--muted);font-size:.85rem}.metric{font-size:1.7rem;font-weight:850}.hide{display:none}.actions{display:flex;flex-wrap:wrap;gap:4px}@media(max-width:520px){main{padding:12px}header{padding:20px 14px}.card{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow" style="color:#c4e2ce">Independent prototype · OMEGA ECS-01</div>
+<h1>Grow Zambia Epistemic Accountability Dashboard</h1>
+<p>Track national targets against evidence—not announcements. Separate verified measurements from source statements, interpretations, inferences, assumptions and unknowns.</p>
+</div></header>
+<main>
+<div class="notice"><strong>Evidence warning:</strong> This is an independent prototype, not an official Government of Zambia dashboard. Target values below are seeded as reported agenda targets; current results and baselines are intentionally blank until evidence is entered and checked. No progress percentages are fabricated.</div>
+<section class="grid" aria-label="Dashboard summary">
+<div class="card"><div class="eyebrow">National targets listed</div><div class="metric" id="targetCount">8</div><div class="small">Targets included in this prototype</div></div>
+<div class="card"><div class="eyebrow">Current results verified</div><div class="metric" id="verifiedCount">0</div><div class="small">Requires a value, period and traceable source</div></div>
+<div class="card"><div class="eyebrow">Evidence gaps</div><div class="metric" id="gapCount">8</div><div class="small">Targets without a verified latest value</div></div>
+<div class="card"><div class="eyebrow">Progress status</div><div class="metric" style="font-size:1.15rem">Not yet assessable</div><div class="small">No comparable baselines/results entered</div></div>
+</section>
+
+<section style="margin-top:22px">
+<div class="eyebrow">01 · Target register</div><h2>National benchmark tracker</h2>
+<p class="small">Progress is calculated only when baseline and latest value are numeric and comparable. For output targets, progress = latest value ÷ target. It is not a forecast.</p>
+<div class="tablewrap"><table id="targetTable"><thead><tr><th>Target</th><th>Benchmark</th><th>Baseline</th><th>Latest result</th><th>Reporting period</th><th>Evidence status</th><th>Progress</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section style="margin-top:24px">
+<div class="eyebrow">02 · Evidence register</div><h2>Add or update an observation</h2>
+<p class="small">Use a source document or URL that can be checked. If a value is reported by an institution but not independently verified, label it as a source statement—not a verified fact.</p>
+<div class="card">
+<form id="entryForm">
+<div class="split">
+<div><label for="target">Target</label><select id="target" required></select></div>
+<div><label for="kind">Epistemic classification</label><select id="kind"><option>Verified fact</option><option>Source statement</option><option>Interpretation</option><option>Inference</option><option>Assumption</option><option>Unknown / gap</option></select></div>
+<div><label for="value">Observed value (number only)</label><input id="value" type="number" step="any" placeholder="Leave blank if unknown"></div>
+<div><label for="period">Reporting period</label><input id="period" placeholder="e.g. 2026 Q2 or FY2026"></div>
+<div><label for="institution">Responsible / reporting institution</label><input id="institution" placeholder="Institution name or Unknown"></div>
+<div><label for="published">Publication date</label><input id="published" type="date"></div>
+<div><label for="source">Source URL</label><input id="source" type="url" placeholder="https://..." ></div>
+<div><label for="confidence">Confidence</label><select id="confidence"><option>Not assessed</option><option>High</option><option>Moderate</option><option>Low</option></select></div>
+</div>
+<label for="note">Claim, method, limitations and verification notes</label><textarea id="note" placeholder="What exactly does the source say? What population, unit, period and method does it cover? Is it independently corroborated?"></textarea>
+<button type="submit">Save observation on this device</button><button type="button" class="secondary" id="exportBtn">Export evidence CSV</button><button type="button" class="secondary" id="clearBtn">Clear local entries</button>
+</form>
+<p class="small">Entries are saved only in this browser on this device (local storage). They are not automatically shared with other users or sent to a central database. Export CSV regularly to back up your work.</p>
+</div>
+<div class="tablewrap" style="margin-top:12px"><table id="evidenceTable"><thead><tr><th>Date entered</th><th>Target</th><th>Classification</th><th>Value</th><th>Period</th><th>Source / notes</th><th>Action</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section style="margin-top:24px">
+<div class="eyebrow">03 · S.N.A.K. and OMEGA checks</div><h2>Epistemic control checklist</h2>
+<div class="grid">
+<div class="card"><strong>SEPARATE</strong><p class="small">Distinguish the target, measurement, source statement, interpretation and proposed cause.</p></div>
+<div class="card"><strong>NAME</strong><p class="small">Identify the institution, dataset, publication date, unit, geography and reporting period.</p></div>
+<div class="card"><strong>ASSIGN</strong><p class="small">Record who is responsible for delivery, data production, verification and correction.</p></div>
+<div class="card"><strong>KAVOD</strong><p class="small">Ask whether measurable outcomes support human flourishing: affordability, livelihoods, access and resilience.</p></div>
+<div class="card"><strong>Ω · Source synchronisation</strong><p class="small">Compare independent, traceable sources. Mark findings synchronised, desynchronised or unresolved; do not treat repeated copies of one claim as independent confirmation.</p></div>
+<div class="card"><strong>ΔD · Who benefits, who pays?</strong><p class="small">Where relevant, record distributional effects across provinces, rural/urban households, farmers, workers and consumers.</p></div>
+</div>
+</section>
+
+<section style="margin-top:24px">
+<div class="eyebrow">04 · Maize-to-mealie-meal affordability</div><h2>Value-chain transmission monitor</h2>
+<p class="small">No live data feed is connected. Enter comparable observations for the same district and time period before drawing conclusions about price transmission.</p>
+<div class="grid">
+<div class="card"><label for="district">District / market</label><input id="district" placeholder="e.g. Choma"></div>
+<div class="card"><label for="maizePrice">Farm-gate maize price (ZMW per kg)</label><input id="maizePrice" type="number" step="any" placeholder="Unknown"></div>
+<div class="card"><label for="dieselPrice">Diesel price (ZMW per litre)</label><input id="dieselPrice" type="number" step="any" placeholder="Unknown"></div>
+<div class="card"><label for="fertPrice">Fertiliser price (ZMW per 50 kg bag)</label><input id="fertPrice" type="number" step="any" placeholder="Unknown"></div>
+<div class="card"><label for="millCost">Milling / distribution cost (ZMW per 25 kg bag)</label><input id="millCost" type="number" step="any" placeholder="Unknown"></div>
+<div class="card"><label for="retailPrice">Retail mealie-meal price (ZMW per 25 kg bag)</label><input id="retailPrice" type="number" step="any" placeholder="Unknown"></div>
+</div>
+<label for="affSource">Source URL / observation notes</label><input id="affSource" type="url" placeholder="https://...">
+<button id="saveAff" type="button">Save affordability observation</button>
+<div id="affList" class="grid" style="margin-top:12px"></div>
+</section>
+<div class="foot"><strong>Methodology and limits:</strong> This dashboard does not certify official results. A value is not treated as verified merely because it appears on a government or media website. Check source provenance, definitions, units, time period, geography, methods and independent corroboration. Missing data are shown as missing. Progress is not calculated from non-comparable series. No official endorsement is implied.</div>
+</main>
+<script>
+const targets=[
+{id:'maize',name:'Maize production',goal:10000000,unit:'tonnes',display:'10 million tonnes'},
+{id:'electricity',name:'Electricity capacity',goal:10000,unit:'MW',display:'10,000 MW'},
+{id:'tourism',name:'Tourist arrivals',goal:5000000,unit:'arrivals',display:'5 million arrivals'},
+{id:'copper',name:'Copper production',goal:3000000,unit:'tonnes',display:'3 million tonnes'},
+{id:'soya',name:'Soya bean production',goal:3000000,unit:'tonnes',display:'3 million tonnes'},
+{id:'wheat',name:'Wheat production',goal:1000000,unit:'tonnes',display:'1 million tonnes'},
+{id:'sugar',name:'Sugar production',goal:1000000,unit:'tonnes',display:'1 million tonnes'},
+{id:'beef',name:'Beef export earnings',goal:1000000000,unit:'USD',display:'US$1 billion'}
+];
+const $=id=>document.getElementById(id);
+const getEntries=()=>JSON.parse(localStorage.getItem('gza_evidence')||'[]');
+const setEntries=x=>localStorage.setItem('gza_evidence',JSON.stringify(x));
+const getAff=()=>JSON.parse(localStorage.getItem('gza_aff')||'[]');
+const fmt=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
+function init(){
+$('target').innerHTML=targets.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+$('targetTable').querySelector('tbody').innerHTML=targets.map(t=>`<tr><td><strong>${t.name}</strong><div class="small">${t.unit}</div></td><td>${t.display}</td><td>Unknown</td><td>Unknown</td><td>Not entered</td><td><span class="tag unknown">Evidence gap</span></td><td>Not assessable</td></tr>`).join('');
+render();
+}
+function render(){
+const entries=getEntries();const latest={};
+entries.forEach(e=>{if(!latest[e.target]||e.entered>latest[e.target].entered)latest[e.target]=e});
+let verified=0,gaps=0;
+$('targetTable').querySelector('tbody').innerHTML=targets.map(t=>{
+const e=latest[t.id];let base='Unknown',val='Unknown',period='Not entered',status='<span class="tag unknown">Evidence gap</span>',prog='Not assessable';
+if(e){period=esc(e.period||'Not specified');status=`<span class="tag ${e.kind==='Verified fact'?'verified':'unknown'}">${esc(e.kind)}</span>`;
+if(e.value!==''&&e.value!==null&&e.value!==undefined)val=fmt(Number(e.value))+' '+t.unit;
+if(e.kind==='Verified fact'&&e.value!==''&&e.source){verified++;prog=(Number(e.value)/t.goal*100).toFixed(1)+'% of target';}else {gaps++;prog='Not verified';}
+}else gaps++;
+return `<tr><td><strong>${t.name}</strong><div class="small">${t.unit}</div></td><td>${t.display}</td><td>${base}</td><td>${val}</td><td>${period}</td><td>${status}</td><td>${prog}</td></tr>`;
+}).join('');
+$('verifiedCount').textContent=verified;$('gapCount').textContent=targets.length-verified;
+$('evidenceTable').querySelector('tbody').innerHTML=entries.slice().reverse().map((e,rev)=>`<tr><td>${esc(e.entered.slice(0,10))}</td><td>${esc((targets.find(t=>t.id===e.target)||{}).name||e.target)}</td><td>${esc(e.kind)}</td><td>${e.value===''?'Unknown':esc(e.value)}</td><td>${esc(e.period||'')}</td><td>${e.source?`<a href="${esc(e.source)}" target="_blank" rel="noopener">Open source</a>`:'No URL'}<div class="small">${esc(e.note||'')}</div></td><td><button class="danger" onclick="delEntry('${e.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="7">No observations entered yet.</td></tr>';
+renderAff();
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+window.delEntry=id=>{setEntries(getEntries().filter(e=>e.id!==id));render()};
+$('entryForm').addEventListener('submit',ev=>{ev.preventDefault();const e={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),entered:new Date().toISOString(),target:$('target').value,kind:$('kind').value,value:$('value').value,period:$('period').value,institution:$('institution').value,published:$('published').value,source:$('source').value,confidence:$('confidence').value,note:$('note').value};setEntries([...getEntries(),e]);ev.target.reset();render();});
+$('exportBtn').onclick=()=>{const rows=[['entered','target','classification','value','period','institution','published','source','confidence','notes'],...getEntries().map(e=>[e.entered,e.target,e.kind,e.value,e.period,e.institution,e.published,e.source,e.confidence,e.note])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='grow-zambia-evidence-register.csv';a.click();URL.revokeObjectURL(a.href);};
+$('clearBtn').onclick=()=>{if(confirm('Delete all locally saved evidence entries from this browser? Export a backup first if needed.')){setEntries([]);render()}};
+$('saveAff').onclick=()=>{const a={id:Date.now(),date:new Date().toISOString(),district:$('district').value,maize:$('maizePrice').value,diesel:$('dieselPrice').value,fertiliser:$('fertPrice').value,milling:$('millCost').value,retail:$('retailPrice').value,source:$('affSource').value};if(!a.district){alert('Enter a district or market name first.');return;}setAff([...getAff(),a]);['district','maizePrice','dieselPrice','fertPrice','millCost','retailPrice','affSource'].forEach(id=>$(id).value='');renderAff();};
+function setAff(a){localStorage.setItem('gza_aff',JSON.stringify(a))}
+function renderAff(){$('affList').innerHTML=getAff().slice().reverse().map(a=>`<div class="card"><strong>${esc(a.district)}</strong><div class="small">${esc(a.date.slice(0,10))} · User-entered, not independently verified</div><p class="small">Maize: ${a.maize?esc(a.maize)+' ZMW/kg':'Unknown'} · Diesel: ${a.diesel?esc(a.diesel)+' ZMW/L':'Unknown'} · Fertiliser: ${a.fertiliser?esc(a.fertiliser)+' ZMW/50 kg':'Unknown'} · Milling/distribution: ${a.milling?esc(a.milling)+' ZMW/25 kg':'Unknown'} · Retail: ${a.retail?esc(a.retail)+' ZMW/25 kg':'Unknown'}</p>${a.source?`<a href="${esc(a.source)}" target="_blank" rel="noopener">Source</a>`:'No source URL recorded'} <button class="danger" onclick="delAff(${a.id})">Delete</button></div>`).join('')||'<div class="card small">No affordability observations recorded.</div>'}
+window.delAff=id=>{setAff(getAff().filter(a=>a.id!==id));renderAff()};
+init();
+</script>
+</body></html>
